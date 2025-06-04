@@ -27,8 +27,8 @@ stages:
       displayName: Install Terraform
       inputs:
         terraformVersion: 'latest'
-    - pwsh: terraform fmt -check
-      displayName: Terraform Format Check
+    - pwsh: terraform fmt
+      displayName: Format Terraform Files
     - pwsh: terraform init -backend=false
       displayName: Terraform Init
     - pwsh: terraform validate

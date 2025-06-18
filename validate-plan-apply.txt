@@ -173,9 +173,9 @@ stages:
 
 # Destroy pipeline
 variables: 
-- group: state-data
+- group: delete
 - name: service-connection
-  value: 'tacowagon-dev'
+  value: 'AzureConn'
 
 trigger:
   branches:
@@ -196,7 +196,7 @@ stages:
       inputs:
         source: 'specific'
         project: $(System.TeamProjectId)
-        pipeline: 'pr-plan'
+        pipeline: 'validate-plan'
         artifactName: PlanFile
         
     - task: TerraformInstaller@0
@@ -215,8 +215,8 @@ stages:
         backendAzureRmContainerName: '$(BACKEND_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME)'
         backendAzureRmKey: '$(BACKEND_AZURE_STORAGE_ACCOUNT_KEY_NAME)'
       env:
+        ARM_USE_OIDC: true
         ARM_CLIENT_ID: '$(BACKEND_CLIENT_ID)'
-        ARM_CLIENT_SECRET: '$(BACKEND_CLIENT_SECRET)'
         ARM_SUBSCRIPTION_ID: '$(BACKEND_SUBSCRIPTION_ID)'
         ARM_TENANT_ID: '$(BACKEND_TENANT_ID)'
         TF_IN_AUTOMATION: true
@@ -231,8 +231,8 @@ stages:
         commandOptions: '-auto-approve'  # Be careful with this in production!
         environmentServiceNameAzureRM: $(service-connection)
       env:
+        ARM_USE_OIDC: true
         ARM_CLIENT_ID: '$(BACKEND_CLIENT_ID)'
-        ARM_CLIENT_SECRET: '$(BACKEND_CLIENT_SECRET)'
         ARM_SUBSCRIPTION_ID: '$(BACKEND_SUBSCRIPTION_ID)'
         ARM_TENANT_ID: '$(BACKEND_TENANT_ID)'
         TF_IN_AUTOMATION: true
